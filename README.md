@@ -2,7 +2,7 @@
 
 Classifying candidate hieroglyphs using models hosted and trained on Google Cloud AutoML Vision.
 
-This API is required by the Googel Arts and Culture Fabricius Workbench, code found at [googleartsculture/workbench](https://github.com/googleartsculture/workbench)
+This API is required by the Google Arts and Culture Fabricius Workbench, code found at [googleartsculture/workbench](https://github.com/googleartsculture/workbench)
 
 ## Contributing
 
