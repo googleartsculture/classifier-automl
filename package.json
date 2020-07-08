@@ -1,0 +1,31 @@
+{
+  "name": "classifier-automl",
+  "version": "1.0.0",
+  "description": "Classifying candidate hieroglyphs using models hosted on Google Cloud AutoML Vision",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hieroglyphics-initiative/classifier-automl.git"
+  },
+  "private": true,
+  "scripts": {
+    "preinstall": "docker container prune --force --filter \"label=project=Hieroglyphics Initiative\" --filter \"label=service=Classification API (automl)\"",
+    "install": "docker build -t $npm_package_docker_tag .",
+    "postinstall": "docker run -ti --name $npm_package_docker_configVolumeName $npm_package_docker_tag gcloud auth login",
+    "docker": "docker run --rm -ti --volumes-from $npm_package_docker_configVolumeName -v `pwd`:/app -v `pwd`/src/test/coverage:/coverage -p 8082:8082 $npm_package_docker_tag",
+    "start": "yarn docker /app/scripts/run_app",
+    "test": "yarn docker /app/scripts/test_app",
+    "lint": "yarn docker /app/scripts/lint_python",
+    "deploy": "yarn docker /app/scripts/deploy_app $npm_package_googleCloud_project $npm_package_version",
+    "bump": "yarn version --no-git-tag-version"
+  },
+  "docker": {
+    "tag": "hieroglyphics-classification-automl",
+    "configVolumeName": "hieroglyphics-classification-automl-gcloud-config"
+  },
+  "googleCloud": {
+    "project": "placeholder-gcloud-application-id"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

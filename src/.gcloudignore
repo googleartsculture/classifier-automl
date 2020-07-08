@@ -1,0 +1,6 @@
+README
+run_tests.py
+*_test.py
+*.py[cod]
+*.*~
+*.*#
