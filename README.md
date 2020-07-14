@@ -1,8 +1,8 @@
-# Classification API (using AutoML)
+# Fabricius Workbench Classification API (using AutoML)
 
 Classifying candidate hieroglyphs using models hosted and trained on Google Cloud AutoML Vision.
 
-This API is required by the Google Arts and Culture Fabricius Workbench, code found at [googleartsculture/workbench](https://github.com/googleartsculture/workbench)
+This API is required by the Google Arts and Culture Fabricius Workbench, code found at [googleartsculture/workbench](https://github.com/googleartsculture/workbench). For more infomation go to the [Google Arts and Culture home page](https://experiments.withgoogle.com/fabricius) for the project.
 
 ## Contributing
 
