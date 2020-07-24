@@ -102,7 +102,8 @@ def require_json(params=None):
 def create_filename(prediction):
     """Create a filename to save to the bucket"""
     epoc = int(time())
-    return '{prediction}/{epoc}-{prediction}.png'.format(prediction=prediction, epoc=epoc)
+    return '{prediction}/{epoc}-{prediction}.png'.format(
+        prediction=prediction, epoc=epoc)
 
 
 def upload_image(filename, image):
