@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 import json
 from test.utils import TestbedTestCase
 from unittest.mock import patch
@@ -23,10 +24,10 @@ import main
 # with open('test/valid_png.txt', 'r') as png:
 #     VALID_PNG_IMAGE_DATA = png.read().replace('\n', '')
 
-
-VALID_JPG_IMAGE_DATA = open('test/valid_jpg.txt', 'r')
+DIR_PATH = os.path.dirname(__file__)
+VALID_JPG_IMAGE_DATA = open(os.path.join(DIR_PATH, 'valid_jpg.txt'), 'r')
 JPG_IMAGE_STR = VALID_JPG_IMAGE_DATA.read().replace('\n', '')
-VALID_PNG_IMAGE_DATA = open('test/valid_png.txt', 'r')
+VALID_PNG_IMAGE_DATA = open(os.path.join(DIR_PATH, 'valid_png.txt'), 'r')
 PNG_IMAGE_STR = VALID_PNG_IMAGE_DATA.read().replace('\n', '')
 
 class MockClassification():
@@ -188,3 +189,10 @@ class MainTests(TestbedTestCase):
             self.assertIsInstance(item.get('score'), float)
             self.assertIn('glyph', item)
             self.assertIsInstance(item.get('glyph'), str)
+
+    def test_warmup_request_responds_200(self):
+        """
+        Asserts that a reuqest to /_ah/warmup is handled.
+        """
+        response = self.client.get('/_ah/warmup')
+        self.assertEqual('200 OK', response.status)

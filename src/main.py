@@ -121,6 +121,10 @@ def upload_image(filename, image):
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/_ah/warmup')
+def warmup():
+    return '', 200, {}
+
 
 @app.route('/classification', methods=['POST'])
 @require_json(['image'])
