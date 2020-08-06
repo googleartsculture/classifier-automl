@@ -46,7 +46,7 @@ steps:
     cd src && pytest
   waitFor:
     - environ-push
-  
+
 
 - name: 'gcr.io/cloud-builders/gcloud'
   id: setenv
@@ -66,6 +66,7 @@ steps:
   - app
   - deploy
   - src/app.yaml
+  - --version=$SHORT_SHA
   - --project=${_TARGET_PROJECT_}
   waitFor:
     - test
