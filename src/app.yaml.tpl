@@ -1,5 +1,5 @@
 service: classification-api2
-runtime: python37
+runtime: python38
 
 default_expiration: "10m"
 
