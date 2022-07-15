@@ -192,8 +192,8 @@ def classification(payload):
     raise BadRequest('Only png images are accepted')
 
   try:
-    print('Prepare to send for inference')
-    client_options = {'api_endpoint': f'${AI_REGION}-aiplatform.googleapis.com'}
+
+    client_options = {'api_endpoint': f'{AI_REGION}-aiplatform.googleapis.com'}
     prediction_client = aiplatform.gapic.PredictionServiceClient(
         client_options=client_options)
 
@@ -215,24 +215,20 @@ def classification(payload):
     response = prediction_client.predict(endpoint=endpoint,
                                          instances=instances,
                                          parameters=parameters)
-    print('response')
-    print('deployed_model_id:', response.deployed_model_id)
+
     logging.info(response)
   except Exception as e:
     print('Error happened in inference')
-
-    print(e.reason)
-    print(e.response)
-    print(e.metadata)
-
     logging.error(e)
     raise InternalServerError('Error communicating with AutoML')
 
   predictions = []
+
   for prediction in response.predictions:
-    glyph = prediction.display_name
-    score = prediction.classifiction.score * weights.get(
-        glyph, 1) if weighted else prediction.classification.score
+
+    glyph = prediction['displayNames'][0]
+    confidence = prediction['confidences'][0]
+    score = confidence * weights.get(glyph, 1) if weighted else confidence
     # Score might have been reduced due to weighting, so need to
     # check it again here
     if glyph != '--other--' and score >= threshold:
