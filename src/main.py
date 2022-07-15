@@ -41,9 +41,9 @@ from google.cloud.aiplatform.gapic.schema import predict
 from google.cloud import storage
 
 TEST_BUCKET = os.environ.get('TEST_BUCKET', '')
-AI_REGION = os.environ.get('AI_REGION', 'us-central1')
-AI_PROJECT = os.environ.get('AUTO_ML_PROJECT', '')
-AI_ENDPOINT_ID = os.environ.get('AI_ENDPOINT_ID', '')
+AI_REGION = os.environ.get('AI_REGION', 'europe-west4')
+AI_PROJECT = os.environ.get('AUTO_ML_PROJECT', 'cilex-fabricius-workbench-prod')
+AI_ENDPOINT_ID = os.environ.get('AI_ENDPOINT_ID', '995559400439545856')
 
 weights = {}
 
@@ -166,9 +166,11 @@ def classification(payload):
 
   # Create an image object from the image data and validate it
   try:
+    print('unpacking image info')
     image = payload.get('image')
     imagedata = re.sub('^data:image/.+;base64,', '', image)
     imagebytes = BytesIO(base64.b64decode(imagedata))
+
     image = Image.open(imagebytes)
 
   except base64.binascii.Error as e:
@@ -190,25 +192,26 @@ def classification(payload):
     raise BadRequest('Only png images are accepted')
 
   try:
+    print('Prepare to send for inference')
     client_options = {'api_endpoint': f'${AI_REGION}-aiplatform.googleapis.com'}
     prediction_client = aiplatform.gapic.PredictionServiceClient(
         client_options=client_options)
 
     encoded_content = base64.b64encode(imagebytes.getvalue()).decode('utf-8')
+
     instance = predict.instance.ImageClassificationPredictionInstance(
-        content=encoded_content,).to_value()
+        content=encoded_content).to_value()
     instances = [instance]
+
     parameters = predict.params.ImageClassificationPredictionParams(
         confidence_threshold=0.5,
         max_predictions=5,
     ).to_value()
-    parameters = predict.params.ImageClassificationPredictionParams(
-        confidence_threshold=0.5,
-        max_predictions=5,
-    ).to_value()
+
     endpoint = prediction_client.endpoint_path(project=AI_PROJECT,
                                                location=AI_REGION,
                                                endpoint=AI_ENDPOINT_ID)
+
     response = prediction_client.predict(endpoint=endpoint,
                                          instances=instances,
                                          parameters=parameters)
@@ -216,6 +219,12 @@ def classification(payload):
     print('deployed_model_id:', response.deployed_model_id)
     logging.info(response)
   except Exception as e:
+    print('Error happened in inference')
+
+    print(e.reason)
+    print(e.response)
+    print(e.metadata)
+
     logging.error(e)
     raise InternalServerError('Error communicating with AutoML')
 
