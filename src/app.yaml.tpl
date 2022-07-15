@@ -11,9 +11,9 @@ handlers:
     secure: always
 
 env_variables:
-  AUTO_ML_PROJECT: {{AUTO_ML_PROJECT}}
-  AUTO_ML_LOCATION: {{AUTO_ML_LOCATION}}
-  AUTO_ML_MODEL: {{AUTO_ML_MODEL}}
+  AI_PROJECT: {{AI_PROJECT}}
+  AI_REGION: {{AI_REGION}}
+  AI_ENDPOINT: {{AI_ENDPOINT}}
 
 inbound_services:
   - warmup

@@ -13,29 +13,35 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+"""
+UTIL MODULE
+"""
 import logging
 import unittest
-
-
 
 logging.disable(logging.WARNING)  # ndb is noisy
 
 
 class TestbedTestCase(unittest.TestCase):
+  """
+  Base Testbedclass
+  """
 
-    @classmethod
-    def setUpClass(cls):
-        super(TestbedTestCase, cls).setUpClass()
+  @classmethod
+  def setUpClass(cls):
+    super(TestbedTestCase, cls).setUpClass()
 
-    def setUp(self):
+  def setUp(self):
 
-        unittest.TestCase.setUp(self)
+    unittest.TestCase.setUp(self)
 
-    def tearDown(self):
+  def tearDown(self):
 
-        unittest.TestCase.tearDown(self)
+    unittest.TestCase.tearDown(self)
 
 
-def strip_xssi_prefix(s):
-    return s.replace(")]}',\n", '')
+def strip_xssi_prefix(input_string):
+  """
+  Strip the JSON prefix used to help prevent xssi
+  """
+  return input_string.replace(")]}',\n", '')
