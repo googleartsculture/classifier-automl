@@ -57,7 +57,11 @@ class MockPrediction():
 
 class MockPredictResponse():
 
-  predictions = [MockPrediction()]
+  predictions = [{
+      'confidences': [0.889192104],
+      'ids': ['1457935925756559360'],
+      'displayNames': ['o34']
+  }]
   processedInput = ''
   metadata = None
   deployed_model_id = '2423439287'
@@ -125,22 +129,6 @@ class MainTests(TestbedTestCase):
     self.assertFalse(data.get('success'))
     self.assertEqual(400, data.get('code'))
     self.assertEqual('Only png images are accepted', data.get('message'))
-
-  def test_classification_request_with_invalid_model_details(self):
-
-    response = self.client.post('/classification',
-                                json={
-                                    'image': PNG_IMAGE_STR,
-                                    'model_name': 'invalid_model',
-                                    'model_version': 'invalid_version'
-                                })
-    data = json.loads(response.data)
-    print(data)
-    self.assertEqual('500 INTERNAL SERVER ERROR', response.status)
-
-    self.assertFalse(data.get('success'))
-    self.assertEqual(500, data.get('code'))
-    self.assertEqual('Error communicating with AutoML', data.get('message'))
 
   def test_classification_request_with_invalid_limit(self):
     response = self.client.post('/classification',
