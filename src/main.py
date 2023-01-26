@@ -225,14 +225,14 @@ def classification(payload):
   predictions = []
 
   for prediction in response.predictions:
-
-    glyph = prediction['displayNames'][0]
-    confidence = prediction['confidences'][0]
-    score = confidence * weights.get(glyph, 1) if weighted else confidence
-    # Score might have been reduced due to weighting, so need to
-    # check it again here
-    if glyph != '--other--' and score >= threshold:
-      predictions.append({'glyph': glyph, 'score': score})
+    if len(prediction['displayNames']):
+      glyph = prediction['displayNames'][0]
+      confidence = prediction['confidences'][0]
+      score = confidence * weights.get(glyph, 1) if weighted else confidence
+      # Score might have been reduced due to weighting, so need to
+      # check it again here
+      if glyph != '--other--' and score >= threshold:
+        predictions.append({'glyph': glyph, 'score': score})
 
   predictions = sorted(predictions, key=lambda p: p.get('score'), reverse=True)
 
